@@ -11,9 +11,16 @@ export class DonationService {
     let data = await this.prisma.request.findMany({
       where: {
         isActive: false
+      },
+      include: {
+        donation: {
+          include: {
+            category: true
+          }
+        },
       }
     });
-    return { data };
+    return { data  };
   }
 
   async handleUserRequest(data: HandleUserRequestDto) {
