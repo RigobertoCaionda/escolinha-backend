@@ -114,11 +114,14 @@ export class DonationService {
   async findAll({ take, skip }): Promise<any> {
     const total = await this.prisma.donation.findMany();
     const totalPages = total.length / take;
-    const data = await this.prisma.donation.findMany({
+    let data = await this.prisma.donation.findMany({
       skip: parseInt(skip),
       take: parseInt(take),
       orderBy: {
         id: 'desc',
+      },
+      include: {
+        image: true
       }
     });
     return { data, total: Math.ceil(totalPages) };

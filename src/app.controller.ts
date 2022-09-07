@@ -1,6 +1,6 @@
 import { Controller, Get, Query, Res } from '@nestjs/common';
-import { AppService } from './app.service';
 import { Public } from './auth/decorators/skip-auth';
+import appConfig from './auth/env-helper/app.config';
 const open = require('open');
 const paypal = require('paypal-rest-sdk');
 
@@ -14,7 +14,7 @@ paypal.configure({
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor() {}
   @Public()
   @Get('/success')
   sucesso(@Query() query) {
@@ -44,7 +44,7 @@ export class AppController {
         } else {
           console.log('Agora sim o pagamento foi concluido com sucesso');
           console.log(JSON.stringify(payment));
-          open(`https://escolinha-criar-crescer.vercel.app/payment_success?price=${price}&id=${id}`);
+          open(`${appConfig().frontURL}/payment_success?price=${price}&id=${id}`);
         }
       },
     );
@@ -70,8 +70,8 @@ export class AppController {
       "intent": "sale", // É para dizer se a intencao é venda ou que
       "payer": { "payment_method": "paypal" }, // Metodo de pagamento
       "redirect_urls": {
-        "return_url": `http://localhost:3000/success?price=${price}&id=${id}`,
-        "cancel_url": "http://localhost:3000/donations",
+        "return_url": `${appConfig().baseURL}/success?price=${price}&id=${id}`,
+        "cancel_url": `${appConfig().baseURL}/donations`
       },
       transactions: [
         {
