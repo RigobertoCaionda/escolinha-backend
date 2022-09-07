@@ -25,6 +25,12 @@ export class DonationController {
   }
 
   @Public()
+  @Get('/unresolved')
+  getRequests() {
+    return this.donationService.getUnresolvedRequests();
+  }
+
+  @Public()
   @Post('/accept-request')
   acceptRequest(@Body() handleUserRequestDto: HandleUserRequestDto) {
     return this.donationService.handleUserRequest(handleUserRequestDto);
