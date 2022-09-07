@@ -1,5 +1,6 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { Public } from 'src/auth/decorators/skip-auth';
+import { CreateRoleDto } from 'src/user/dto/create-role.dto';
 import { FIlterDto } from 'src/user/dto/filter';
 import { RolesService } from '../services/roles.service';
 
@@ -15,5 +16,11 @@ export class RolesController {
       skip,
       take,
     });
+  }
+
+  @Public()
+  @Post('')
+  create(@Body() createRoleDto: CreateRoleDto) {
+    return this.rolesService.create(createRoleDto);
   }
 }
