@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, UseInterceptors, UploadedFiles, Res, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, UseInterceptors, UploadedFiles, Res, Req, Put } from '@nestjs/common';
 import { Public } from 'src/auth/decorators/skip-auth';
 import { FIlterDto } from 'src/user/dto/filter';
 import { DonationService } from './donation.service';
@@ -37,7 +37,7 @@ export class DonationController {
   }
 
   @Public()
-  @Post('/accept-request')
+  @Put('/accept-request')
   acceptRequest(@Body() handleUserRequestDto: HandleUserRequestDto) {
     return this.donationService.handleUserRequest(handleUserRequestDto);
   }
