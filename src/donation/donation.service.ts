@@ -15,7 +15,8 @@ export class DonationService {
       include: {
         donation: {
           include: {
-            category: true
+            category: true,
+            user: true
           }
         },
       }
