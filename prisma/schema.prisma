@@ -17,6 +17,8 @@ model User {
   age      Int
   gender   String
   password String
+  address  String?
+  phone    String?
   role     Role? @relation(fields: [roleId], references: [id])
   roleId   Int?
   donator  Donator[]
