@@ -1,12 +1,97 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query, Res } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Public } from './auth/decorators/skip-auth';
+const open = require('open');
+const paypal = require('paypal-rest-sdk');
+
+paypal.configure({
+  mode: 'sandbox',
+  client_id:
+    'AXRltMZwXMgnamFgNp4bx8_5rcHdqpdIEErh1exdo7_nyR4FjtE8AbCcaYqBdDOxOO-pPCMv5uHhQOoC',
+  client_secret:
+    'ENiQmuoO-8LmAyh5YJIfJWW9Uvr_YolkYRH-M5fqmYk36ZUXj_tGAc9HK0O_X8z59OfUIm_Y6jssRE5E',
+});
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
+  @Public()
+  @Get('/success')
+  sucesso(@Query() query) {
+    const payerId = query.PayerID;
+    const paymentId = query.paymentId;
+    const price = query.price;
+    const id = query.id;
+    const valor = {
+        "currency": "BRL",
+        "total": Number(price).toFixed(2)
+    };
+    const executePaymentJson = ({ payerId, valor }) => ({
+        "payer_id": payerId,
+        "transactions": [{
+            "amount": valor
+        }]
+    });
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+    const execute_payment_json = executePaymentJson({ payerId, valor });
+    paypal.payment.execute(
+      paymentId,
+      execute_payment_json,
+      (error, payment) => {
+        if (error) {
+          console.warn(error.response);
+          throw error;
+        } else {
+          console.log('Agora sim o pagamento foi concluido com sucesso');
+          console.log(JSON.stringify(payment));
+          open(`https://escolinha-criar-crescer.vercel.app/payment_success?price=${price}&id=${id}`);
+        }
+      },
+    );
+  }
+
+  @Public()
+  @Get('/payment')
+  getHello(@Query() query) {
+    const { price, id } = query;
+    const carrinho = [
+      {
+        "name": "Doação monetária", // Nome Produto
+        "sku": 1, // id do produto
+        "price": Number(price).toFixed(2),
+        "currency": "BRL",
+        "quantity": 1,
+      },
+    ];
+    
+    const valor = { "currency": "BRL", "total": Number(price).toFixed(2) };
+    const descricao = 'Ajudando pessoas doando dinheiro.';
+    const json_pagamento = {
+      "intent": "sale", // É para dizer se a intencao é venda ou que
+      "payer": { "payment_method": "paypal" }, // Metodo de pagamento
+      "redirect_urls": {
+        "return_url": `http://localhost:3000/success?price=${price}&id=${id}`,
+        "cancel_url": "http://localhost:3000/donations",
+      },
+      transactions: [
+        {
+          "item_list": { "items": carrinho },
+          "amount": valor,
+          "description": descricao,
+        },
+      ],
+    };
+
+    paypal.payment.create(json_pagamento, (err, pagamento) => {
+      if (err) {
+        console.warn(err);
+      } else {
+        pagamento.links.forEach((link) => {
+          if (link.rel === 'approval_url') {
+            open(link.href);
+          }
+        });
+      }
+    });
   }
 }

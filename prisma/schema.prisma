@@ -1,0 +1,143 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @default(autoincrement()) @id
+  email    String  @unique
+  name     String
+  age      Int
+  gender   String
+  password String
+  role     Role? @relation(fields: [roleId], references: [id])
+  roleId   Int?
+  donator  Donator[]
+  donation Donation[]
+}
+
+model Role {
+  id        Int @default(autoincrement()) @id
+  name      String
+
+  users     User[]
+  employees Employee[]
+  teachers  Teacher[]
+  sponsors  Sponsor[]
+}
+
+model Employee {
+  id        Int     @default(autoincrement()) @id
+  email     String  @unique
+  name      String
+  age       Int
+  gender    String
+  password  String
+  role      Role? @relation(fields: [roleId], references: [id])
+  roleId    Int?
+  donations Donation[]
+}
+
+model Teacher {
+  id       Int     @default(autoincrement()) @id
+  email    String  @unique
+  name     String?
+  age      Int
+  gender   String
+  password String
+  role     Role? @relation(fields: [roleId], references: [id])
+  roleId   Int?
+  courses Course[]
+}
+
+model Course {
+  id           Int     @default(autoincrement()) @id
+  name         String
+  totalVacancy Int
+  full         Boolean
+  teacher      Teacher? @relation(fields: [teacherId], references: [id])
+  teacherId    Int?
+  pupils       Pupil[]
+}
+
+model Pupil {
+  id          Int     @default(autoincrement()) @id
+  email       String  @unique
+  name        String?
+  age         Int
+  gender      String
+  password    String
+  father_name String
+  mother_name String
+  course Course? @relation(fields: [courseId], references: [id])
+  courseId Int?
+}
+
+model Sponsor {
+  id       Int     @default(autoincrement()) @id
+  email    String  @unique
+  name     String?
+  age      Int
+  gender   String
+  password String
+  role     Role? @relation(fields: [roleId], references: [id])
+  roleId   Int?
+}
+
+model Donation {
+  id            Int     @default(autoincrement()) @id
+  name          String
+  desc          String
+  employee      Employee? @relation(fields: [employeeId], references: [id])
+  employeeId    Int?
+  isOpen        Boolean
+  createdAt     DateTime
+  closedAt      DateTime
+  isActive      Boolean?
+  donators      Donator[]
+  image         Image[]
+  Request       Request[]
+  category      Category? @relation(fields: [categoryId], references: [id])
+  categoryId    Int?
+  user          User? @relation(fields: [userId], references: [id])
+  userId        Int?
+}
+
+model Donator {
+  id           Int     @default(autoincrement()) @id
+  donatedItem String
+  donation     Donation? @relation(fields: [donationId], references: [id])
+  donationId  Int?
+  user        User? @relation(fields: [userId], references: [id])
+  userId      Int?
+  image       String
+  cash        Float?
+}
+
+model Category {
+  id           Int     @default(autoincrement()) @id
+  name         String
+  donations    Donation[]
+}
+
+model Image {
+  id         Int      @default(autoincrement()) @id
+  url        String   @unique
+  donation    Donation  @relation(fields: [donationId], references: [id])
+  donationId  Int
+}
+
+model Request {
+  id          Int      @default(autoincrement()) @id
+  answer      String
+  isActive    Boolean
+  donation    Donation @relation(fields: [donationId], references: [id])
+  donationId  Int
+}
