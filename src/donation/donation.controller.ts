@@ -25,6 +25,12 @@ export class DonationController {
   }
 
   @Public()
+  @Get('/unresolved/:id')
+  getOneRequest(@Param('id', ParseIntPipe) id: number) {
+    return this.donationService.getOneUnresolvedRequest(id);
+  }
+
+  @Public()
   @Get('/unresolved')
   getRequests() {
     return this.donationService.getUnresolvedRequests();

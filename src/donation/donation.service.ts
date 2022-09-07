@@ -7,6 +7,23 @@ import { UpdateDonationDto } from './dto/update-donation.dto';
 @Injectable()
 export class DonationService {
   constructor(private prisma: PrismaService) {}
+  async getOneUnresolvedRequest(id: number) {
+    let data = await this.prisma.request.findUnique({
+      where: {
+        id
+      },
+      include: {
+        donation: {
+          include: {
+            category: true,
+            user: true
+          }
+        },
+      }
+    });
+    return { data  };
+  }
+
   async getUnresolvedRequests() {
     let data = await this.prisma.request.findMany({
       where: {
