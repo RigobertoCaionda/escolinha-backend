@@ -160,7 +160,8 @@ export class DonationService {
         id: 'desc',
       },
       include: {
-        image: true
+        image: true,
+        category: true
       },
       where: {
         isActive: true
