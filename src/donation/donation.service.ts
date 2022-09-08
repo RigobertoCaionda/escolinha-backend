@@ -147,7 +147,11 @@ export class DonationService {
   }
 
   async findAll({ take, skip }): Promise<any> {
-    const total = await this.prisma.donation.findMany();
+    const total = await this.prisma.donation.findMany({
+      where: {
+        isActive: true
+      }
+    });
     const totalPages = total.length / take;
     let data = await this.prisma.donation.findMany({
       skip: parseInt(skip),
