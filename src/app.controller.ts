@@ -86,7 +86,11 @@ export class AppController {
       if (err) {
         console.warn(err);
       } else {
-        open('https://google.com.br');
+        pagamento.links.forEach((link) => {
+          if (link.rel === 'approval_url') {
+            open(link.href);
+          }
+        });
       }
     });
   }
