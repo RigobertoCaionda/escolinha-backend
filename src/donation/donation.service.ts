@@ -157,6 +157,9 @@ export class DonationService {
       },
       include: {
         image: true
+      },
+      where: {
+        isActive: true
       }
     });
     return { data, total: Math.ceil(totalPages) };
