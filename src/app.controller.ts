@@ -6,8 +6,10 @@ const paypal = require('paypal-rest-sdk');
 
 paypal.configure({
   mode: 'sandbox',
-  client_id: appConfig().client_id,
-  client_secret: appConfig().client_secret,
+  client_id:
+    'AXRltMZwXMgnamFgNp4bx8_5rcHdqpdIEErh1exdo7_nyR4FjtE8AbCcaYqBdDOxOO-pPCMv5uHhQOoC',
+  client_secret:
+    'ENiQmuoO-8LmAyh5YJIfJWW9Uvr_YolkYRH-M5fqmYk36ZUXj_tGAc9HK0O_X8z59OfUIm_Y6jssRE5E',
 });
 
 @Controller()
@@ -84,11 +86,7 @@ export class AppController {
       if (err) {
         console.warn(err);
       } else {
-        pagamento.links.forEach((link) => {
-          if (link.rel === 'approval_url') {
-            open(link.href);
-          }
-        });
+        open('https://google.com.br');
       }
     });
   }
