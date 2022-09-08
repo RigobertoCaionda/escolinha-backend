@@ -109,6 +109,7 @@ export class DonationService {
           desc: createDonationDto.desc,
           isOpen: true,
           isActive: createDonationDto.role == 'administrador' ? true : false,
+          userId: Number(createDonationDto.userId),
           createdAt: new Date(),
           categoryId: Number(createDonationDto.categoryId),
           closedAt: new Date(),
