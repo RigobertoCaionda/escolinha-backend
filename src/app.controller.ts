@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Res } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { Public } from './auth/decorators/skip-auth';
 import appConfig from './auth/env-helper/app.config';
 const open = require('open');
@@ -6,10 +6,8 @@ const paypal = require('paypal-rest-sdk');
 
 paypal.configure({
   mode: 'sandbox',
-  client_id:
-    'AXRltMZwXMgnamFgNp4bx8_5rcHdqpdIEErh1exdo7_nyR4FjtE8AbCcaYqBdDOxOO-pPCMv5uHhQOoC',
-  client_secret:
-    'ENiQmuoO-8LmAyh5YJIfJWW9Uvr_YolkYRH-M5fqmYk36ZUXj_tGAc9HK0O_X8z59OfUIm_Y6jssRE5E',
+  client_id: appConfig().client_id,
+  client_secret: appConfig().client_secret,
 });
 
 @Controller()
