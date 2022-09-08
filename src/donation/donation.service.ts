@@ -166,6 +166,9 @@ export class DonationService {
     const donation = await this.prisma.donation.findUnique({
       where: {
         id,
+      },
+      include: {
+        image: true
       }
     });
     return { data: donation };
