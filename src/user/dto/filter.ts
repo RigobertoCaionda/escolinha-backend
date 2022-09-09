@@ -13,6 +13,6 @@ export class FIlterDto {
   search?: string;
 
   @IsOptional()
-  @IsInt()
+  @IsString()
   categoryId?: number;
 }
