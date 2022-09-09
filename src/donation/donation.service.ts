@@ -176,7 +176,8 @@ export class DonationService {
         id,
       },
       include: {
-        image: true
+        image: true,
+        category: true
       }
     });
     return { data: donation };
