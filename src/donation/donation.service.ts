@@ -147,7 +147,9 @@ export class DonationService {
   }
 
   async findAll({ take, skip, search, categoryId }): Promise<any> {
-    const total = await this.prisma.donation.findMany({
+    let total;
+   if(categoryId) {
+    total = await this.prisma.donation.findMany({
       where: {
         isActive: true,
         AND: {
@@ -160,29 +162,67 @@ export class DonationService {
         }
       }
     });
+   }
+   if(!categoryId) {
+    total = await this.prisma.donation.findMany({
+      where: {
+        isActive: true,
+        AND: {
+          name: {
+            contains: search
+          }
+        }
+      }
+    });
+   }
     const totalPages = total.length / take;
-    let data = await this.prisma.donation.findMany({
-      skip: parseInt(skip),
-      take: parseInt(take),
-      orderBy: {
-        id: 'desc',
-      },
-      include: {
-        image: true,
-        category: true
-      },
-      where: {
-        isActive: true,
-        AND: {
-          name: {
-            contains: search
-          },
+    let data;
+    if(categoryId) {
+      data = await this.prisma.donation.findMany({
+        skip: parseInt(skip),
+        take: parseInt(take),
+        orderBy: {
+          id: 'desc',
+        },
+        include: {
+          image: true,
+          category: true
+        },
+        where: {
+          isActive: true,
           AND: {
-            categoryId: Number(categoryId)
+            name: {
+              contains: search
+            },
+            AND: {
+              categoryId: Number(categoryId)
+            }
           }
         }
-      }
-    });
+      });
+    }
+
+    if(!categoryId) {
+      data = await this.prisma.donation.findMany({
+        skip: parseInt(skip),
+        take: parseInt(take),
+        orderBy: {
+          id: 'desc',
+        },
+        include: {
+          image: true,
+          category: true
+        },
+        where: {
+          isActive: true,
+          AND: {
+            name: {
+              contains: search
+            }
+          }
+        }
+      });
+    }
     return { data, total: Math.ceil(totalPages) };
   }
 
