@@ -17,18 +17,17 @@ export class AuthController {
     const salt = 10;
     const passwordHash = await bcrypt.hash(createAuthDto.password, salt);
     createAuthDto.password = passwordHash;
-    createAuthDto.isAdmin = req.user?.role;
+    createAuthDto.isAdmin = req.user?.role; //Nao precisa disso, basta verificar se o role é admin, caso for barra já que nessa rota não se cadastra admins
     return this.authService.create(createAuthDto);
   }
 
- @Roles(Role.Admin)
+  @Roles(Role.Admin)
   @Post('/signup-admin')
-  async createAmin(@Body() createAuthDto: CreateAuthDto, @Req() req) {
+  async createAmin(@Body() createAuthDto: CreateAuthDto) {
     const salt = 10;
     const passwordHash = await bcrypt.hash(createAuthDto.password, salt);
     createAuthDto.password = passwordHash;
-    createAuthDto.isAdmin = req.user.role;
-    return this.authService.create(createAuthDto);
+    return this.authService.createAdmin(createAuthDto);
   }
 
   @Public()
