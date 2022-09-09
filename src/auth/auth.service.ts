@@ -19,7 +19,9 @@ export class AuthService {
     if (!role.data) throw new NotFoundException('Cargo não encontrado');
     let user = await this.findByEmail(createAuthDto.email);
     if (user.data) throw new BadRequestException('Email já existe');
-    let data = await this.prisma.user.create({ data: createAuthDto });
+    let data;
+    return { data: createAuthDto.isAdmin }
+    data = await this.prisma.user.create({ data: createAuthDto });
     return {
       token: this.jwtService.sign({
         id: data.id,

@@ -34,4 +34,8 @@ export class CreateAuthDto {
 
   @IsInt()
   roleId: number;
+
+  @IsOptional()
+  @IsString()
+  isAdmin?: string;
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './decorators/skip-auth';
 import { CreateAuthDto } from './dto/create-auth.dto';
@@ -11,10 +11,11 @@ export class AuthController {
 
   @Public()
   @Post('/signup')
-  async create(@Body() createAuthDto: CreateAuthDto) {
+  async create(@Body() createAuthDto: CreateAuthDto, @Req() req) {
     const salt = 10;
     const passwordHash = await bcrypt.hash(createAuthDto.password, salt);
     createAuthDto.password = passwordHash;
+    createAuthDto.isAdmin = req.user.role
     return this.authService.create(createAuthDto);
   }
 
