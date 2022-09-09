@@ -45,8 +45,8 @@ export class DonationController {
   @Public()
   @Get()
   findAll(@Query() query: FIlterDto) {
-    const { skip = 0, take = 5, search } = query;
-    return this.donationService.findAll({ skip, take, search });
+    const { skip = 0, take = 5, search, categoryId } = query;
+    return this.donationService.findAll({ skip, take, search, categoryId });
   }
 
   @Public()

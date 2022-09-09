@@ -1,4 +1,4 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsInt } from 'class-validator';
 export class FIlterDto {
   @IsOptional()
   @IsString()
@@ -11,4 +11,8 @@ export class FIlterDto {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @IsOptional()
+  @IsInt()
+  categoryId?: number;
 }

@@ -146,13 +146,16 @@ export class DonationService {
     return { data: donation };
   }
 
-  async findAll({ take, skip, search }): Promise<any> {
+  async findAll({ take, skip, search, categoryId }): Promise<any> {
     const total = await this.prisma.donation.findMany({
       where: {
         isActive: true,
         AND: {
           name: {
             contains: search
+          },
+          AND: {
+            categoryId
           }
         }
       }
@@ -173,6 +176,9 @@ export class DonationService {
         AND: {
           name: {
             contains: search
+          },
+          AND: {
+            categoryId
           }
         }
       }
