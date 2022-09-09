@@ -155,7 +155,7 @@ export class DonationService {
             contains: search
           },
           AND: {
-            categoryId
+            categoryId: Number(categoryId)
           }
         }
       }
@@ -178,7 +178,7 @@ export class DonationService {
             contains: search
           },
           AND: {
-            categoryId
+            categoryId: Number(categoryId)
           }
         }
       }
