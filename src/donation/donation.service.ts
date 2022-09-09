@@ -151,7 +151,9 @@ export class DonationService {
       where: {
         isActive: true,
         AND: {
-          name: search
+          name: {
+            contains: search
+          }
         }
       }
     });
@@ -169,7 +171,9 @@ export class DonationService {
       where: {
         isActive: true,
         AND: {
-          name: search
+          name: {
+            contains: search
+          }
         }
       }
     });
