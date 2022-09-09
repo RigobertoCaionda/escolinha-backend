@@ -15,7 +15,7 @@ export class AuthController {
     const salt = 10;
     const passwordHash = await bcrypt.hash(createAuthDto.password, salt);
     createAuthDto.password = passwordHash;
-    createAuthDto.isAdmin = req.user.role
+    createAuthDto.isAdmin = req.user;
     return this.authService.create(createAuthDto);
   }
 
