@@ -7,4 +7,8 @@ export class FIlterDto {
   @IsOptional()
   @IsString()
   take?: string;
+
+  @IsOptional()
+  @IsString()
+  search?: string;
 }

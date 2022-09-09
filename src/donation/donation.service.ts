@@ -146,10 +146,13 @@ export class DonationService {
     return { data: donation };
   }
 
-  async findAll({ take, skip }): Promise<any> {
+  async findAll({ take, skip, search }): Promise<any> {
     const total = await this.prisma.donation.findMany({
       where: {
-        isActive: true
+        isActive: true,
+        AND: {
+          name: search
+        }
       }
     });
     const totalPages = total.length / take;
@@ -164,7 +167,10 @@ export class DonationService {
         category: true
       },
       where: {
-        isActive: true
+        isActive: true,
+        AND: {
+          name: search
+        }
       }
     });
     return { data, total: Math.ceil(totalPages) };
