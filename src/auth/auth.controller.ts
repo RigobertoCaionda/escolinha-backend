@@ -4,6 +4,8 @@ import { Public } from './decorators/skip-auth';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import * as bcrypt from 'bcrypt';
+import { Roles } from './decorators/roles.decorator';
+import { Role } from './enum/role.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -15,7 +17,17 @@ export class AuthController {
     const salt = 10;
     const passwordHash = await bcrypt.hash(createAuthDto.password, salt);
     createAuthDto.password = passwordHash;
-    createAuthDto.isAdmin = req.user;
+    createAuthDto.isAdmin = req.user?.role;
+    return this.authService.create(createAuthDto);
+  }
+
+ @Roles(Role.Admin)
+  @Post('/signup-admin')
+  async createAmin(@Body() createAuthDto: CreateAuthDto, @Req() req) {
+    const salt = 10;
+    const passwordHash = await bcrypt.hash(createAuthDto.password, salt);
+    createAuthDto.password = passwordHash;
+    createAuthDto.isAdmin = req.user.role;
     return this.authService.create(createAuthDto);
   }
 

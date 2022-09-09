@@ -19,9 +19,26 @@ export class AuthService {
     if (!role.data) throw new NotFoundException('Cargo não encontrado');
     let user = await this.findByEmail(createAuthDto.email);
     if (user.data) throw new BadRequestException('Email já existe');
-    let data;
-    return { data: createAuthDto.isAdmin }
-    data = await this.prisma.user.create({ data: createAuthDto });
+    if(!createAuthDto.isAdmin && createAuthDto.roleId == 1) {
+      throw new BadRequestException('Só administradores podem cadastrar outros administradores');
+    }
+    let data = await this.prisma.user.create({ data: createAuthDto });
+    return {
+      token: this.jwtService.sign({
+        id: data.id,
+        name: data.name,
+        role: role.data.name,
+      }),
+      data
+    };
+  }
+
+  async createAdmin(createAuthDto: CreateAuthDto) {
+    let role = await this.rolesService.show(createAuthDto.roleId);
+    if (!role.data) throw new NotFoundException('Cargo não encontrado');
+    let user = await this.findByEmail(createAuthDto.email);
+    if (user.data) throw new BadRequestException('Email já existe');
+    let data = await this.prisma.user.create({ data: createAuthDto });
     return {
       token: this.jwtService.sign({
         id: data.id,
