@@ -10,7 +10,6 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 export class DonatorController {
   constructor(private readonly donatorService: DonatorService) {}
 
-  @Public()
   @Post()
   @UseInterceptors(
     FilesInterceptor('image', null, fileInterceptorOptionsHelper),
