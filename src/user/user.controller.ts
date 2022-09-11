@@ -17,16 +17,17 @@ export class UserController {
   getLoggedUser(@Req() req) {
     return this.userService.getLoggedUserInfo(req.user.id);
   }
-  
+
   @Public()
   @Get()
   findAll() {
     return this.userService.findAll();
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(parseInt(id));
   }
 
   @Patch(':id')
