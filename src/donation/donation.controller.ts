@@ -13,6 +13,10 @@ import { HandleUserRequestDto } from './dto/handle-user-request.dto';
 export class DonationController {
   constructor(private readonly donationService: DonationService) {}
 
+  @Delete('/request-delete/:id')
+  deleteUserRequest(@Param('id') id: string) {
+    return this.donationService.deleteUserRequest(parseInt(id));
+  }
   @Post()
   @UseInterceptors(
     FilesInterceptor('images', null, fileInterceptorOptionsHelper),
