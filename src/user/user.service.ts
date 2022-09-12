@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -10,13 +14,13 @@ export class UserService {
   async getLoggedUserInfo(id: number) {
     let user = await this.prisma.user.findUnique({
       where: {
-        id
+        id,
       },
       include: {
-        role: true
-      }
+        role: true,
+      },
     });
-    return {  data: user }
+    return { data: user };
   }
 
   create(createUserDto: CreateUserDto) {
@@ -26,8 +30,8 @@ export class UserService {
   async findAll() {
     let data = await this.prisma.user.findMany({
       include: {
-        role: true
-      }
+        role: true,
+      },
     });
     return { data };
   }
@@ -35,26 +39,47 @@ export class UserService {
   async findOne(id: number) {
     let data = await this.prisma.user.findUnique({
       where: {
-        id
-      }
+        id,
+      },
     });
-    return { data }
+    return { data };
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    if (updateUserDto.email) {
+      let user = await this.prisma.user.findUnique({
+        where: {
+          email: updateUserDto.email,
+        },
+      });
+      if (user) throw new BadRequestException('Email já existe!');
+    }
+    if (updateUserDto.roleId) {
+      let role = await this.prisma.role.findUnique({
+        where: {
+          id: updateUserDto.roleId,
+        },
+      });
+      if (!role) throw new NotFoundException('Cargo não encontrado');
+    }
+    return await this.prisma.user.update({
+      data: updateUserDto,
+      where: {
+        id,
+      },
+    });
   }
 
   async remove(id: number) {
     let user = await this.prisma.user.findUnique({
       where: {
-        id
-      }
+        id,
+      },
     });
-    if(!user) throw new NotFoundException('Usuário não encontrado');
+    if (!user) throw new NotFoundException('Usuário não encontrado');
     return await this.prisma.user.delete({
       where: {
-        id
+        id,
       },
     });
   }

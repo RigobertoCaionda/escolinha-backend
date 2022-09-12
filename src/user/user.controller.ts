@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from 'src/auth/decorators/skip-auth';
+import * as bcrypt from 'bcrypt';
 
 @Controller('user')
 export class UserController {
@@ -31,8 +41,13 @@ export class UserController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    if (updateUserDto.password) {
+      const salt = 10;
+      const passwordHash = await bcrypt.hash(updateUserDto.password, salt);
+      updateUserDto.password = passwordHash;
+    }
+    return this.userService.update(parseInt(id), updateUserDto);
   }
 
   @Delete(':id')

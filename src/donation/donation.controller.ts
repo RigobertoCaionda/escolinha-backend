@@ -1,4 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, UseInterceptors, UploadedFiles, Res, Req, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  ParseIntPipe,
+  UseInterceptors,
+  UploadedFiles,
+  Res,
+  Req,
+  Put,
+} from '@nestjs/common';
 import { Public } from 'src/auth/decorators/skip-auth';
 import { FIlterDto } from 'src/user/dto/filter';
 import { DonationService } from './donation.service';
@@ -21,8 +36,11 @@ export class DonationController {
   @UseInterceptors(
     FilesInterceptor('images', null, fileInterceptorOptionsHelper),
   )
-  create(@Body() createDonationDto: CreateDonationDto, 
-  @UploadedFiles() files: Array<Express.Multer.File>, @Req() req) {
+  create(
+    @Body() createDonationDto: CreateDonationDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Req() req,
+  ) {
     createDonationDto.role = req.user.role;
     createDonationDto.images = files;
     return this.donationService.create(createDonationDto);
@@ -60,7 +78,10 @@ export class DonationController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDonationDto: UpdateDonationDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateDonationDto: UpdateDonationDto,
+  ) {
     return this.donationService.update(+id, updateDonationDto);
   }
 
