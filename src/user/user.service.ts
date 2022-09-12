@@ -46,18 +46,10 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    if (updateUserDto.email) {
-      let user = await this.prisma.user.findUnique({
-        where: {
-          email: updateUserDto.email,
-        },
-      });
-      if (user) throw new BadRequestException('Email já existe!');
-    }
     if (updateUserDto.roleId) {
       let role = await this.prisma.role.findUnique({
         where: {
-          id: updateUserDto.roleId,
+          id: updateUserDto.roleId
         },
       });
       if (!role) throw new NotFoundException('Cargo não encontrado');
