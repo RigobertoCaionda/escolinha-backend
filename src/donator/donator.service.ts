@@ -32,7 +32,8 @@ export class DonatorService {
         data: { 
           answer: '',
           isActive: false,
-          donationId: Number(createDonatorDto.donationId)
+          donationId: Number(createDonatorDto.donationId),
+          userId: Number(createDonatorDto.userId)
          }
        });
       return { data: donator };
@@ -41,7 +42,8 @@ export class DonatorService {
       data: { 
         answer: '',
         isActive: false,
-        donationId: Number(createDonatorDto.donationId)
+        donationId: Number(createDonatorDto.donationId),
+        userId: Number(createDonatorDto.userId)
        }
      });
     let data = await this.prisma.donator.create({ data: newCreateDonatorDto });

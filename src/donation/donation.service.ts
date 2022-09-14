@@ -33,6 +33,7 @@ export class DonationService {
             user: true
           }
         },
+        user: true
       }
     });
     return { data  };
@@ -137,7 +138,8 @@ export class DonationService {
           data: { 
             answer: '',
             isActive: false,
-            donationId: donation.id
+            donationId: donation.id,
+            userId: Number(createDonationDto.userId)
            }
         });
         
@@ -152,7 +154,8 @@ export class DonationService {
         data: { 
           answer: '',
           isActive: false,
-          donationId: donation.id
+          donationId: donation.id,
+          userId: Number(createDonationDto.userId)
          }
       });
       
