@@ -32,7 +32,7 @@ export class DonatorService {
         data: { 
           answer: '',
           isActive: false,
-          donationId: createDonatorDto.donationId
+          donationId: Number(createDonatorDto.donationId)
          }
        });
       return { data: donator };
