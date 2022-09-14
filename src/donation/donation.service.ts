@@ -51,6 +51,7 @@ export class DonationService {
             user: true
           }
         },
+        user: true
       }
     });
     return { data  };
