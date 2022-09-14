@@ -28,6 +28,13 @@ export class DonatorService {
           image: imgData[0].url
         }
        });
+       await this.prisma.request.create({
+        data: { 
+          answer: '',
+          isActive: false,
+          donationId: createDonatorDto.donationId
+         }
+       });
       return { data: donator };
     }
     let data = await this.prisma.donator.create({ data: newCreateDonatorDto });
