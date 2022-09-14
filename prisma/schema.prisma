@@ -23,6 +23,7 @@ model User {
   roleId   Int?
   donator  Donator[]
   donation Donation[]
+  request Request[]
 }
 
 model Role {
@@ -142,4 +143,6 @@ model Request {
   isActive    Boolean
   donation    Donation @relation(fields: [donationId], references: [id])
   donationId  Int
+  user          User? @relation(fields: [userId], references: [id])
+  userId        Int?
 }
