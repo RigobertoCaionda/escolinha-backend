@@ -37,6 +37,13 @@ export class DonatorService {
        });
       return { data: donator };
     }
+    await this.prisma.request.create({
+      data: { 
+        answer: '',
+        isActive: false,
+        donationId: Number(createDonatorDto.donationId)
+       }
+     });
     let data = await this.prisma.donator.create({ data: newCreateDonatorDto });
     return { data };
   }
