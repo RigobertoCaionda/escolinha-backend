@@ -50,8 +50,14 @@ export class DonatorService {
     return { data };
   }
 
-  findAll() {
-    return `This action returns all donator`;
+  async findAll() {
+    let donators = await this.prisma.donator.findMany({
+      include: {
+        donation: true,
+        user: true
+      }
+    });
+    return { data: donators };
   }
 
   findOne(id: number) {
