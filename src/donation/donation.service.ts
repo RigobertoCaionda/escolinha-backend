@@ -251,7 +251,7 @@ export class DonationService {
     return { data: donation };
   }
 
-  async update(id: number, updateDonationDto: UpdateDonationDto) {
+  async update(id: number, updateDonationDto: any) {
     let donation = await this.prisma.donation.findUnique({
       where: {
         id: Number(id)
@@ -266,6 +266,12 @@ export class DonationService {
         },
       });
       if (!category) throw new NotFoundException('Categoria não encontrada');
+    }
+    if(updateDonationDto.isActive == 'true') {
+      updateDonationDto.isActive = true
+    }
+    if(updateDonationDto.isActive == 'false') {
+      updateDonationDto.isActive = false
     }
     return await this.prisma.donation.update({
       data: updateDonationDto,
