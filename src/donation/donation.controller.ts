@@ -82,7 +82,7 @@ export class DonationController {
     @Param('id') id: string,
     @Body() updateDonationDto: UpdateDonationDto,
   ) {
-    return this.donationService.update(+id, updateDonationDto);
+    return this.donationService.update(parseInt(id), updateDonationDto);
   }
 
   @Delete(':id')

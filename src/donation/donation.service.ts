@@ -100,9 +100,6 @@ export class DonationService {
       createdAt: new Date(),
       closedAt: new Date() // Permitir nulo
     };
-    // if(createDonationDto.role == 'administrador') {      
-    //   newCreateDonationtDto.employeeId = Number(createDonationDto.userId)
-    // }
     if (createDonationDto.images && createDonationDto.images.length > 0) {
       const imgData = [];
       createDonationDto.images.forEach((img) => {
@@ -116,9 +113,6 @@ export class DonationService {
         });
         if (imageExists) throw new BadRequestException('Imagem já existe');
       }
-      // if(createDonationDto.role == 'administrador') {
-      //   createDonationDto.employeeId = Number(createDonationDto.userId);
-      // }
       const donation = await this.prisma.donation.create({
         data: {
           name: createDonationDto.name,
@@ -257,8 +251,27 @@ export class DonationService {
     return { data: donation };
   }
 
-  update(id: number, updateDonationDto: UpdateDonationDto) {
-    return `This action updates a #${id} donation`;
+  async update(id: number, updateDonationDto: UpdateDonationDto) {
+    let donation = await this.prisma.donation.findUnique({
+      where: {
+        id: Number(id)
+      }
+    });
+    if(!donation) throw new NotFoundException('Essa corrente de doação não existe');
+    if (updateDonationDto.categoryId) {
+      let category = await this.prisma.category.findUnique({
+        where: {
+          id: updateDonationDto.categoryId
+        },
+      });
+      if (!category) throw new NotFoundException('Categoria não encontrada');
+    }
+    return await this.prisma.donation.update({
+      data: updateDonationDto,
+      where: {
+        id,
+      },
+    });
   }
 
   remove(id: number) {
