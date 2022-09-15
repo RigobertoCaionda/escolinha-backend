@@ -259,6 +259,7 @@ export class DonationService {
     });
     if(!donation) throw new NotFoundException('Essa corrente de doação não existe');
     if (updateDonationDto.categoryId) {
+      updateDonationDto.categoryId = Number(updateDonationDto.categoryId)
       let category = await this.prisma.category.findUnique({
         where: {
           id: updateDonationDto.categoryId
@@ -274,7 +275,17 @@ export class DonationService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} donation`;
+  async remove(id: number) {
+    let donation = await this.prisma.donation.findUnique({
+      where: {
+        id
+      }
+    });
+    if(!donation) throw new NotFoundException('Doação não encontrada');
+    return await this.prisma.donation.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

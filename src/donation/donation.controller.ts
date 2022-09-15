@@ -87,7 +87,7 @@ export class DonationController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.donationService.remove(+id);
+    return this.donationService.remove(parseInt(id));
   }
 
   @Public()
