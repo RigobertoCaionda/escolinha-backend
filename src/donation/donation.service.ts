@@ -289,7 +289,7 @@ export class DonationService {
     });
     await this.prisma.image.deleteMany({
       where: {
-        id: donation.id
+        donationId: donation.id
       }
     });
     if(!donation) throw new NotFoundException('Doação não encontrada');
