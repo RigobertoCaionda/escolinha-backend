@@ -122,7 +122,6 @@ model Donator {
   userId      Int?
   image       String
   cash        Float?
-  isActive    Boolean?
 }
 
 model Category {

@@ -292,6 +292,11 @@ export class DonationService {
         donationId: donation.id
       }
     });
+    await this.prisma.donator.deleteMany({
+      where: {
+        donationId: donation.id
+      }
+    });
     if(!donation) throw new NotFoundException('Doação não encontrada');
     return await this.prisma.donation.delete({
       where: {
