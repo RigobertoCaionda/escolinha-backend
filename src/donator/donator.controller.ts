@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles, Query } from '@nestjs/common';
 import { Public } from 'src/auth/decorators/skip-auth';
 import { DonatorService } from './donator.service';
 import { CreateDonatorDto } from './dto/create-donator.dto';
@@ -21,8 +21,9 @@ export class DonatorController {
   }
 
   @Get()
-  findAll() {
-    return this.donatorService.findAll();
+  findAll(@Query() query) {
+    const { id } = query;
+    return this.donatorService.findAll(parseInt(id));
   }
 
   @Get(':id')

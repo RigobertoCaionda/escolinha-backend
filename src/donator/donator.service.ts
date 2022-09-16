@@ -50,11 +50,14 @@ export class DonatorService {
     return { data };
   }
 
-  async findAll() {
+  async findAll(id: number) {
     let donators = await this.prisma.donator.findMany({
       include: {
         donation: true,
         user: true
+      },
+      where: {
+        donationId: Number(id)
       }
     });
     return { data: donators };
