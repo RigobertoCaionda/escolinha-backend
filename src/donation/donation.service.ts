@@ -292,6 +292,11 @@ export class DonationService {
         donationId: donation.id
       }
     });
+    await this.prisma.request.deleteMany({
+      where: {
+        donationId: donation.id
+      }
+    });
     await this.prisma.donator.deleteMany({
       where: {
         donationId: donation.id

@@ -144,5 +144,5 @@ model Request {
   donation    Donation @relation(fields: [donationId], references: [id])
   donationId  Int
   user          User? @relation(fields: [userId], references: [id])
-  userId        Int?
+  userId         Int?
 }
